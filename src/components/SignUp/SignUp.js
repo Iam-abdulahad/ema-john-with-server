@@ -1,21 +1,59 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth';
+import auth from '../../firebase.init';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 
 const SignUp = () => {
+          const [email, setEmail] = useState('');
+          const [password, setPassword] = useState('');
+          const [confirmPassword, setConfirmPassword] = useState('');
+          const [error, setError] = useState('');
+          const [createUserWithEmailAndPassword, user] = useCreateUserWithEmailAndPassword(auth);
+          const navigate = useNavigate;
+
+
+          const handleEmailBlur = event => {
+                    setEmail(event.target.value);
+          }
+
+          const handlePasswordBlur = event => {
+                    setPassword(event.target.value);
+          }
+
+          const handleConfirmPasswordBlur = event => {
+                    setConfirmPassword(event.target.value);
+          }
+          
+          if (user){
+                    return(
+                              navigate('/shop')
+                    )
+          }
+          const handleCreateUser = event => {
+                    event.preventDefault()
+                    if(password !== confirmPassword){
+                              setError('Your password are not matched! Please type similar password in both field.')
+                              return;
+                    }
+          }
+
           return (
                     <div className='signin-card'>
                               <div>
                                         <h4 className="signin-text">SignUp</h4>
-                                        <form>
+                                        <form onSubmit={handleCreateUser}>
                                                   <div className='input-group'>
                                                             <label htmlFor="Email">Email</label>
-                                                            <input type="email" name="Your Email" id="" required/>
+                                                            <input onBlur={handleEmailBlur} type="email" name="Your Email" id="" required />
                                                             <label htmlFor="Password">Password</label>
-                                                            <input type="password" name="password" id="" required/>
+                                                            <input onBlur={handlePasswordBlur} type="password" name="password" id="" required />
+                                                            <p style={{color: 'red'}}>{error}</p>
                                                             <label htmlFor="Confirm-Password">Confirm Password</label>
-                                                            <input type="password" name="confirm-password" id="" required/>
+                                                            <input onBlur={handleConfirmPasswordBlur} type="password" name="confirm-password" id="" required />
                                                   </div>
-                                                  <button className='btn-submit' type="submit">Sign in</button>
+                                                  <button onClick={() => {createUserWithEmailAndPassword(email, password)}} className='btn-submit' type="submit">Sign up</button>
                                                   <p>
                                                             Already have an account? <Link className='new-ac-link' to='/signin'>Please Login</Link>
                                                   </p>
