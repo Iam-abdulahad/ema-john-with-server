@@ -49,15 +49,18 @@
           position: absolute;
           width: 50px;
           height: 25px;
-
           font-family: 'Lato';
           font-style: normal;
           font-weight: 400;
           font-size: 21px;
           line-height: 25px;
           letter-spacing: 0.0015em;
-
           color: #0E161A;
+}
 
+.new-ac-link{
+          color: #FF9900;
+          text-decoration: none;
+          
 
 }
